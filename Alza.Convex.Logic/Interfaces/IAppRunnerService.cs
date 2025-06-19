@@ -1,7 +1,6 @@
-﻿namespace Alza.Convex.Logic.Interfaces
+﻿namespace Alza.Convex.Logic.Interfaces;
+
+public interface IAppRunnerService
 {
-    public interface IAppRunnerService
-    {
-        void Run();
-    }
+    void Run();
 }

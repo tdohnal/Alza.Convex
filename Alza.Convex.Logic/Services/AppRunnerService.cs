@@ -1,4 +1,4 @@
-﻿using Alza.Convex.Logic.Infrastructure.Interfaces;
+﻿using Alza.Convex.Logic.Infrastructure;
 
 namespace Alza.Convex.Logic.Services;
 
@@ -38,7 +38,7 @@ public class AppRunnerService : IAppRunnerService
             if (autoGen == "y" || autoGen == "yes")
             {
                 _console.Msg($"Generating {n} random points...");
-                _logger.LogInformation($"Random generation of {n} points.");
+                _logger.LogInformation("Random generation of {Count} points.", n);
                 points = _convexHullService.GenerateRandomPoints(n);
             }
             else
@@ -75,13 +75,13 @@ public class AppRunnerService : IAppRunnerService
                 !int.TryParse(input[1], out var y))
             {
                 _console.Warn("Invalid input. Try again.");
-                _logger.LogWarning($"Invalid input for point {i + 1}.");
+                _logger.LogWarning("Invalid input for point {Index}.", i + 1);
                 i--;
                 continue;
             }
 
             points.Add(new Point(x, y));
-            _logger.LogDebug($"User entered point: ({x}, {y})");
+            _logger.LogDebug("User entered point: ({X}, {Y})", x, y);
         }
 
         return points;

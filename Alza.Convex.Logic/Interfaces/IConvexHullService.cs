@@ -1,11 +1,8 @@
-﻿using Alza.Convex.Logic.Models;
+﻿namespace Alza.Convex.Logic.Interfaces;
 
-namespace Alza.Convex.Logic.Interfaces
+public interface IConvexHullService
 {
-    public interface IConvexHullService
-    {
-        IList<Point> FindConvexHull(IList<Point> points);
+    IList<Point> FindConvexHull(IList<Point> points);
 
-        IList<Point> GenerateRandomPoints(int count);
-    }
+    IList<Point> GenerateRandomPoints(int count);
 }
