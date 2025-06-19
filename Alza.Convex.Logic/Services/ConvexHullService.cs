@@ -2,11 +2,12 @@
 {
     public class ConvexHullService : IConvexHullService
     {
-        private readonly ILogger<ConvexHullService> _loger;
+        private readonly ILogger<ConvexHullService> _logger;
 
-        public ConvexHullService(ILogger<ConvexHullService> logger)
+        public ConvexHullService(
+            ILogger<ConvexHullService> logger)
         {
-            _loger = logger;
+            _logger = logger;
         }
 
         public IList<Point> FindConvexHull(IList<Point> points)
@@ -51,7 +52,7 @@
                 var item = new Point(x, y);
                 points.Add(item);
 
-                _loger.LogDebug($"Generuji bod {i + 1}: ({x}, {y})");
+                _logger.LogInformation($"Generate point {i + 1}: ({x}, {y})...");
             }
             return points;
         }

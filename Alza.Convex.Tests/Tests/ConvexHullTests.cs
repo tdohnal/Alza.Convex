@@ -1,6 +1,6 @@
 using Alza.Convex.Logic.Interfaces;
+using Alza.Convex.Logic.Models;
 using Microsoft.Extensions.DependencyInjection;
-using System.Drawing;
 
 namespace Alza.Convex.Tests.Tests
 {
@@ -9,7 +9,7 @@ namespace Alza.Convex.Tests.Tests
         [Fact]
         public void FindsCorrectHull()
         {
-            List<Point> points = new List<Point>
+            var points = new List<Point>
 {
                 new Point(0, 0),
                 new Point(1, 1),
@@ -20,6 +20,10 @@ namespace Alza.Convex.Tests.Tests
 };
 
             var convexHullService = ServiceProvider.GetRequiredService<IConvexHullService>();
+
+            if (convexHullService is null)
+                throw new NullReferenceException(nameof(convexHullService));
+
             var hull = convexHullService.FindConvexHull(points);
 
             Assert.Equal(4, hull.Count);
