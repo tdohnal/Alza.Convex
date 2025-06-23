@@ -21,7 +21,6 @@ public class ConvexHullTests : TestBase
     [Fact]
     public void FindsCorrectHull()
     {
-        // Arrange
         var points = new List<Point>
         {
             new Point(0, 0),
@@ -34,12 +33,10 @@ public class ConvexHullTests : TestBase
 
         _logger.LogInformation("Testing convex hull computation with {Count} points.", points.Count);
 
-        // Act
         var hull = _convexHullService.FindConvexHull(points);
 
         _logger.LogInformation("Computed convex hull with {HullCount} points.", hull.Count);
 
-        // Assert
         Assert.Equal(4, hull.Count);
         Assert.Contains(new Point(0, 0), hull);
         Assert.Contains(new Point(0, 1), hull);
