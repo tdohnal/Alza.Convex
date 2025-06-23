@@ -46,7 +46,7 @@ public class ConvexHullService : IConvexHullService
         var rnd = new Random();
         var points = new List<Point>(count);
 
-        _logger.LogInformation("Starting random generation of {Count} points.", count);
+        _logger.LogDebug("Starting random generation of {Count} points.", count);
 
         for (var i = 0; i < count; i++)
         {
@@ -59,7 +59,7 @@ public class ConvexHullService : IConvexHullService
             _logger.LogDebug("Generated point {Index}: ({X}, {Y})", i + 1, x, y);
         }
 
-        _logger.LogInformation("Finished generating {Count} points.", count);
+        _logger.LogDebug("Finished generating {Count} points.", count);
 
         return points;
     }

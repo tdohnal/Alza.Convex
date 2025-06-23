@@ -12,8 +12,7 @@ public class ConvexHullTests : TestBase
 
     public ConvexHullTests()
     {
-        _convexHullService = ServiceProvider.GetRequiredService<IConvexHullService>()
-            ?? throw new InvalidOperationException("Service IConvexHullService not registered.");
+        _convexHullService = ServiceProvider.GetRequiredService<IConvexHullService>();
 
         _logger = ServiceProvider.GetRequiredService<ILogger<ConvexHullTests>>();
     }

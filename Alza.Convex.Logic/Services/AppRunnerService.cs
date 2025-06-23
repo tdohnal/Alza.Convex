@@ -1,20 +1,15 @@
-﻿using Alza.Convex.Logic.Infrastructure;
-
-namespace Alza.Convex.Logic.Services;
+﻿namespace Alza.Convex.Logic.Services;
 
 public class AppRunnerService : IAppRunnerService
 {
-    private readonly IConsoleWriter<AppRunnerService> _console;
     private readonly ILogger<AppRunnerService> _logger;
     private readonly IConvexHullService _convexHullService;
 
     public AppRunnerService(
         IConvexHullService convexHullService,
-        IConsoleWriter<AppRunnerService> console,
         ILogger<AppRunnerService> logger)
     {
         _convexHullService = convexHullService;
-        _console = console;
         _logger = logger;
     }
 
@@ -22,22 +17,30 @@ public class AppRunnerService : IAppRunnerService
     {
         try
         {
-            _logger.LogDebug("Application Run - Convex Hull Calculator");
-
-            var inputN = _console.Prompt("Enter number of points: ");
+            Console.Write("Enter number of points: ");
+            var inputN = Console.ReadLine();
             if (!int.TryParse(inputN, out var n) || n < 3)
             {
-                _console.Warn("Please enter a valid integer (3 or more).");
+                _logger.LogWarning("Please enter a valid integer (3 or more).");
                 return;
             }
 
-            var autoGen = _console.Prompt("Do you want to generate points automatically? (y/n): ").Trim().ToLower();
+
+            Console.Write("Do you want to generate points automatically? (y/n): ");
+            var autoGenInput = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(autoGenInput))
+            {
+                _logger.LogWarning("Input cannot be null or empty.");
+                return;
+            }
+            var autoGen = autoGenInput.Trim().ToLower();
+
 
             IList<Point> points;
 
             if (autoGen == "y" || autoGen == "yes")
             {
-                _console.Msg($"Generating {n} random points...");
+                _logger.LogDebug($"Generating {n} random points...");
                 _logger.LogInformation("Random generation of {Count} points.", n);
                 points = _convexHullService.GenerateRandomPoints(n);
             }
@@ -50,15 +53,13 @@ public class AppRunnerService : IAppRunnerService
 
             var hull = _convexHullService.FindConvexHull(points);
 
-            _console.Msg("\nConvex Hull:");
-            _console.WritePointsTable(hull);
+            WritePointsTable(hull);
 
             _logger.LogInformation("Application finished successfully.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Exception thrown in AppRunnerService.");
-            _console.Error("An unexpected error occurred. Check logs.");
         }
     }
 
@@ -68,13 +69,13 @@ public class AppRunnerService : IAppRunnerService
 
         for (int i = 0; i < count; i++)
         {
-            var input = _console.Prompt($"Enter point {i + 1} (X Y): ").Split();
+            Console.Write($"Enter point {i + 1} (X Y): ");
+            var input = Console.ReadLine().Split();
 
             if (input.Length != 2 ||
                 !int.TryParse(input[0], out var x) ||
                 !int.TryParse(input[1], out var y))
             {
-                _console.Warn("Invalid input. Try again.");
                 _logger.LogWarning("Invalid input for point {Index}.", i + 1);
                 i--;
                 continue;
@@ -85,5 +86,34 @@ public class AppRunnerService : IAppRunnerService
         }
 
         return points;
+    }
+
+    public void WritePointsTable(IEnumerable<Point> points)
+    {
+        Console.WriteLine("\nConvex Hull:");
+        const int colWidth = 12;
+        string separator = "+" + new string('-', colWidth + 2) + "+" + new string('-', colWidth + 2) + "+";
+
+        SetColor(ConsoleColor.Cyan);
+        Console.WriteLine(separator);
+        Console.WriteLine($"| {"X".PadRight(colWidth)} | {"Y".PadRight(colWidth)} |");
+        Console.WriteLine(separator);
+        Console.ResetColor();
+
+        foreach (var p in points)
+        {
+            Console.WriteLine($"| {p.X.ToString().PadRight(colWidth)} | {p.Y.ToString().PadRight(colWidth)} |");
+        }
+
+        SetColor(ConsoleColor.Cyan);
+        Console.WriteLine(separator);
+        Console.ResetColor();
+    }
+
+    private void SetColor(ConsoleColor foreground, ConsoleColor? background = null)
+    {
+        Console.ForegroundColor = foreground;
+        if (background.HasValue)
+            Console.BackgroundColor = background.Value;
     }
 }

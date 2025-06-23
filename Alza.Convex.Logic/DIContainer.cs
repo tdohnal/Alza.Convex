@@ -1,5 +1,4 @@
-﻿using Alza.Convex.Logic.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Alza.Convex.Logic.DIContainer;
 
@@ -27,7 +26,6 @@ public static class DIContainer
 
         services.AddSingleton<IConvexHullService, ConvexHullService>();
         services.AddSingleton<IAppRunnerService, AppRunnerService>();
-        services.AddSingleton(typeof(IConsoleWriter<>), typeof(ConsoleWriter<>));
 
         #endregion
     }
